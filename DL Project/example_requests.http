@@ -1,0 +1,320 @@
+###
+# Sentiment Analysis API - Example Requests
+# 
+# Use this file to test the FastAPI endpoints.
+# These examples can be run in VS Code with the REST Client extension
+# or used as curl command references.
+###
+
+### Health Check
+GET http://localhost:8000/health
+Content-Type: application/json
+
+###
+# Expected Response:
+# {
+#   "status": "healthy",
+#   "model_loaded": true,
+#   "model_info": { ... }
+# }
+
+### Get Model Information
+GET http://localhost:8000/model/info
+Content-Type: application/json
+
+###
+# Expected Response:
+# {
+#   "model_loaded": true,
+#   "model_config": { ... },
+#   "class_names": ["negative", "positive"],
+#   ...
+# }
+
+### Single Sentiment Prediction - Positive Example
+POST http://localhost:8000/predict
+Content-Type: application/json
+
+{
+  "text": "This movie is absolutely fantastic! I loved every moment of it. The acting was superb and the plot was engaging.",
+  "return_probabilities": true
+}
+
+###
+# Expected Response:
+# {
+#   "label": "positive",
+#   "score": 0.95,
+#   "probabilities": {
+#     "positive": 0.95,
+#     "negative": 0.05
+#   }
+# }
+
+### Single Sentiment Prediction - Negative Example
+POST http://localhost:8000/predict
+Content-Type: application/json
+
+{
+  "text": "Terrible film. Boring plot and awful acting. Complete waste of time and money.",
+  "return_probabilities": true
+}
+
+###
+# Expected Response:
+# {
+#   "label": "negative",
+#   "score": 0.92,
+#   "probabilities": {
+#     "positive": 0.08,
+#     "negative": 0.92
+#   }
+# }
+
+### Single Sentiment Prediction - Neutral/Mixed Example
+POST http://localhost:8000/predict
+Content-Type: application/json
+
+{
+  "text": "The movie was okay. Some parts were good, others not so much. Average experience overall.",
+  "return_probabilities": false
+}
+
+###
+# Expected Response:
+# {
+#   "label": "negative", // or "positive" depending on model
+#   "score": 0.65
+# }
+
+### Batch Sentiment Prediction
+POST http://localhost:8000/predict/batch
+Content-Type: application/json
+
+{
+  "texts": [
+    "I love this product! Amazing quality and fast shipping.",
+    "Worst purchase ever. Poor quality and terrible customer service.",
+    "The service was decent. Nothing special but not bad either.",
+    "Outstanding performance! Highly recommended to everyone.",
+    "Very disappointed with this purchase. Overpriced and low quality."
+  ],
+  "return_probabilities": true
+}
+
+###
+# Expected Response:
+# {
+#   "predictions": [
+#     { "label": "positive", "score": 0.89, "probabilities": {...} },
+#     { "label": "negative", "score": 0.91, "probabilities": {...} },
+#     { "label": "negative", "score": 0.62, "probabilities": {...} },
+#     { "label": "positive", "score": 0.94, "probabilities": {...} },
+#     { "label": "negative", "score": 0.88, "probabilities": {...} }
+#   ],
+#   "total_processed": 5
+# }
+
+### API Metrics
+GET http://localhost:8000/metrics
+Content-Type: application/json
+
+###
+# Expected Response:
+# {
+#   "model_loaded": true,
+#   "model_path": "./saved_model",
+#   "api_version": "1.0.0"
+# }
+
+### Error Testing - Empty Text
+POST http://localhost:8000/predict
+Content-Type: application/json
+
+{
+  "text": "",
+  "return_probabilities": false
+}
+
+###
+# Expected Response (400 Bad Request):
+# {
+#   "error": "Text cannot be empty"
+# }
+
+### Error Testing - Text Too Long
+POST http://localhost:8000/predict
+Content-Type: application/json
+
+{
+  "text": "{{ repeat 'This is a very long text. ' 500 times }}",
+  "return_probabilities": false
+}
+
+###
+# Expected Response (400 Bad Request):
+# {
+#   "error": "Text too long. Maximum 5000 characters."
+# }
+
+### Batch Error Testing - Empty List
+POST http://localhost:8000/predict/batch
+Content-Type: application/json
+
+{
+  "texts": [],
+  "return_probabilities": false
+}
+
+###
+# Expected Response (400 Bad Request):
+# {
+#   "error": "Texts list cannot be empty"
+# }
+
+### Batch Error Testing - Too Many Texts
+POST http://localhost:8000/predict/batch
+Content-Type: application/json
+
+{
+  "texts": [
+    "Text 1", "Text 2", "Text 3", "Text 4", "Text 5",
+    // ... (add more to exceed the limit of 100)
+  ]
+}
+
+###
+# Expected Response (400 Bad Request):
+# {
+#   "error": "Too many texts. Maximum 100 per batch."
+# }
+
+###
+# CURL Command Examples
+# 
+# You can also use these curl commands to test the API:
+
+# Health Check
+# curl -X GET "http://localhost:8000/health" -H "Content-Type: application/json"
+
+# Single Prediction
+# curl -X POST "http://localhost:8000/predict" \
+#   -H "Content-Type: application/json" \
+#   -d '{"text": "This movie is great!", "return_probabilities": true}'
+
+# Batch Prediction
+# curl -X POST "http://localhost:8000/predict/batch" \
+#   -H "Content-Type: application/json" \
+#   -d '{"texts": ["Great movie!", "Terrible film."], "return_probabilities": true}'
+
+# Model Information
+# curl -X GET "http://localhost:8000/model/info" -H "Content-Type: application/json"
+
+###
+# JavaScript/Fetch Examples
+# 
+# For frontend integration:
+
+/*
+// Single prediction
+async function predictSentiment(text) {
+    const response = await fetch('http://localhost:8000/predict', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            text: text,
+            return_probabilities: true
+        })
+    });
+    
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    return await response.json();
+}
+
+// Batch prediction
+async function predictBatch(texts) {
+    const response = await fetch('http://localhost:8000/predict/batch', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            texts: texts,
+            return_probabilities: true
+        })
+    });
+    
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    return await response.json();
+}
+
+// Health check
+async function checkHealth() {
+    const response = await fetch('http://localhost:8000/health');
+    return await response.json();
+}
+*/
+
+###
+# Python Example
+# 
+# For Python applications:
+
+/*
+import requests
+import json
+
+# API base URL
+BASE_URL = "http://localhost:8000"
+
+def predict_sentiment(text, return_probabilities=True):
+    """Predict sentiment for a single text."""
+    url = f"{BASE_URL}/predict"
+    payload = {
+        "text": text,
+        "return_probabilities": return_probabilities
+    }
+    
+    response = requests.post(url, json=payload)
+    response.raise_for_status()
+    return response.json()
+
+def predict_batch(texts, return_probabilities=True):
+    """Predict sentiment for multiple texts."""
+    url = f"{BASE_URL}/predict/batch"
+    payload = {
+        "texts": texts,
+        "return_probabilities": return_probabilities
+    }
+    
+    response = requests.post(url, json=payload)
+    response.raise_for_status()
+    return response.json()
+
+def check_health():
+    """Check API health."""
+    url = f"{BASE_URL}/health"
+    response = requests.get(url)
+    return response.json()
+
+# Example usage
+if __name__ == "__main__":
+    # Single prediction
+    result = predict_sentiment("This is a great product!")
+    print(f"Sentiment: {result['label']}, Score: {result['score']:.3f}")
+    
+    # Batch prediction
+    texts = ["Great movie!", "Terrible service.", "Okay product."]
+    batch_results = predict_batch(texts)
+    
+    for i, prediction in enumerate(batch_results['predictions']):
+        print(f"Text {i+1}: {prediction['label']} ({prediction['score']:.3f})")
+*/

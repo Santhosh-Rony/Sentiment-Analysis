@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sentiment Analysis - Professional Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto 30px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #667eea;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            padding: 30px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .card-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .card-header p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .card-body {
+            padding: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+            min-height: 140px;
+            transition: all 0.3s;
+            background: #f9fafb;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper label {
+            color: #4b5563;
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .result {
+            display: none;
+            padding: 30px;
+            border-radius: 16px;
+            margin-top: 30px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result.positive {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 2px solid #6ee7b7;
+        }
+
+        .result.negative {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 2px solid #fca5a5;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .result-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .result.positive .result-icon {
+            background: #10b981;
+            color: white;
+        }
+
+        .result.negative .result-icon {
+            background: #ef4444;
+            color: white;
+        }
+
+        .result-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .result.positive h3 {
+            color: #065f46;
+        }
+
+        .result.negative h3 {
+            color: #991b1b;
+        }
+
+        .confidence-score {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .result.positive .confidence-score {
+            color: #047857;
+        }
+
+        .result.negative .confidence-score {
+            color: #dc2626;
+        }
+
+        .probabilities {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .probabilities h4 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            color: #374151;
+        }
+
+        .prob-bar {
+            margin-bottom: 16px;
+        }
+
+        .prob-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .prob-track {
+            height: 12px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .prob-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .prob-fill.positive {
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+        }
+
+        .prob-fill.negative {
+            background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .examples {
+            margin-top: 40px;
+            padding: 30px;
+            background: #f9fafb;
+            border-radius: 16px;
+        }
+
+        .examples h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .example-btn {
+            padding: 12px 16px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+        }
+
+        .example-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+        }
+
+        .footer-content {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .tech-badge {
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .card-body {
+                padding: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .example-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+
+    <div class="container">
+        
+        <!-- Main Card -->
+        <div class="main-card">
+            <div class="card-header">
+                <h2>Analyze Your Text</h2>
+                <p>Enter any text to get instant sentiment analysis with detailed probability scores</p>
+            </div>
+
+            <div class="card-body">
+                <!-- Input Section -->
+                <div class="input-group">
+                    <label class="input-label">Text to Analyze</label>
+                    <textarea 
+                        id="textInput" 
+                        placeholder="Type or paste your text here... For example: 'This product exceeded my expectations! The quality is outstanding and delivery was super fast.'"
+                    ></textarea>
+                </div>
+
+                <!-- Options -->
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="showProbabilities" checked>
+                    <label for="showProbabilities">Show detailed probability distribution</label>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="analyzeSentiment()" id="analyzeBtn">
+                        <span>🔍</span>
+                        <span>Analyze Sentiment</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearInput()">
+                        <span>🗑️</span>
+                        <span>Clear</span>
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Analyzing with AI...</div>
+                </div>
+
+                <!-- Result Display -->
+                <div id="result" class="result"></div>
+
+                <!-- Example Texts -->
+                <div class="examples">
+                    <h3>Quick Examples</h3>
+                    <div class="example-grid">
+                        <button class="example-btn" onclick="useExample('This product is absolutely amazing! Best purchase I have ever made. Highly recommend to everyone!')">
+                            ⭐ Positive Review
+                        </button>
+                        <button class="example-btn" onclick="useExample('Terrible experience. Poor quality and awful customer service. Very disappointed.')">
+                            ❌ Negative Review
+                        </button>
+                        <button class="example-btn" onclick="useExample('The service was exceptional! They went above and beyond to help me. Five stars!')">
+                            💚 Great Feedback
+                        </button>
+                        <button class="example-btn" onclick="useExample('Complete waste of money. Product broke after two days. Do not buy!')">
+                            ⚠️ Bad Feedback
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <script>
+        async function analyzeSentiment() {
+            const text = document.getElementById('textInput').value.trim();
+            const showProbabilities = document.getElementById('showProbabilities').checked;
+            const resultDiv = document.getElementById('result');
+            const loadingDiv = document.getElementById('loading');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            
+            if (!text) {
+                showError('Please enter some text to analyze.');
+                return;
+            }
+            
+            try {
+                // Show loading state
+                loadingDiv.style.display = 'block';
+                resultDiv.style.display = 'none';
+                analyzeBtn.disabled = true;
+                
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        text: text,
+                        return_probabilities: showProbabilities
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayResult(data);
+                } else {
+                    showError(data.detail || 'An error occurred while analyzing the text.');
+                }
+            } catch (error) {
+                showError('Failed to connect to the API. Please ensure the server is running.');
+            } finally {
+                loadingDiv.style.display = 'none';
+                analyzeBtn.disabled = false;
+            }
+        }
+        
+        function displayResult(data) {
+            const resultDiv = document.getElementById('result');
+            const sentiment = data.sentiment.toLowerCase();
+            const confidence = (data.confidence * 100).toFixed(1);
+            const icon = sentiment === 'positive' ? '😊' : '😔';
+            
+            let resultHTML = `
+                <div class="result-header">
+                    <div class="result-icon">${icon}</div>
+                    <div class="result-content">
+                        <h3>${data.sentiment} Sentiment</h3>
+                        <div class="confidence-score">Confidence: ${confidence}%</div>
+                    </div>
+                </div>
+            `;
+            
+            if (data.probabilities) {
+                const positive = (data.probabilities.positive * 100).toFixed(1);
+                const negative = (data.probabilities.negative * 100).toFixed(1);
+                
+                resultHTML += `
+                    <div class="probabilities">
+                        <h4>Probability Distribution</h4>
+                        <div class="prob-bar">
+                            <div class="prob-label">
+                                <span>Positive</span>
+                                <span>${positive}%</span>
+                            </div>
+                            <div class="prob-track">
+                                <div class="prob-fill positive" style="width: ${positive}%"></div>
+                            </div>
+                        </div>
+                        <div class="prob-bar">
+                            <div class="prob-label">
+                                <span>Negative</span>
+                                <span>${negative}%</span>
+                            </div>
+                            <div class="prob-track">
+                                <div class="prob-fill negative" style="width: ${negative}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            resultDiv.innerHTML = resultHTML;
+            resultDiv.className = `result ${sentiment}`;
+            resultDiv.style.display = 'block';
+        }
+        
+        function showError(message) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <div class="result-header">
+                    <div class="result-icon">⚠️</div>
+                    <div class="result-content">
+                        <h3>Error</h3>
+                        <div class="confidence-score">${message}</div>
+                    </div>
+                </div>
+            `;
+            resultDiv.className = 'result negative';
+            resultDiv.style.display = 'block';
+        }
+        
+        function clearInput() {
+            document.getElementById('textInput').value = '';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('textInput').focus();
+        }
+        
+        function useExample(text) {
+            document.getElementById('textInput').value = text;
+            analyzeSentiment();
+        }
+
+        // Keyboard shortcut (Ctrl/Cmd + Enter)
+        document.getElementById('textInput').addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                analyzeSentiment();
+            }
+        });
+
+        // Auto-focus on text input
+        window.addEventListener('load', function() {
+            document.getElementById('textInput').focus();
+        });
+    </script>
+</body>
+</html>

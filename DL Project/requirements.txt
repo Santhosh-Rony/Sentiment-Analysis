@@ -1,0 +1,13 @@
+transformers>=4.21.0
+torch>=2.0.0
+tensorflow>=2.12.0  # For custom TensorFlow/Keras models
+tf-keras>=2.12.0  # Backwards-compatible Keras
+fastapi>=0.95.0
+uvicorn[standard]>=0.20.0
+python-multipart>=0.0.6
+pydantic>=2.0.0
+# Note: Transformers uses PyTorch backend for pre-trained models (industry standard)
+# Optional utilities
+requests>=2.28.0
+python-dotenv>=1.0.0
+
